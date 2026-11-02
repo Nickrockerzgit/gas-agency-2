@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { Reveal } from "./Reveal";
 
 export function Container({ className, children }: { className?: string; children: ReactNode }) {
   return <div className={cn("mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8", className)}>{children}</div>;
@@ -47,12 +48,12 @@ export function SectionHeader({
   onDark?: boolean;
 }) {
   return (
-    <div className={cn("mb-10 max-w-3xl", center && "mx-auto text-center")}>
+    <Reveal className={cn("mb-10 max-w-3xl", center && "mx-auto text-center")} y={28}>
       <p className={cn("font-mono text-xs font-bold tracking-widest uppercase", onDark ? "text-white/70" : "text-signal")}>{eyebrow}</p>
       <h2 id={id} className={cn("mt-1 text-3xl font-bold sm:text-4xl", onDark && "text-white")}>
         {title}
       </h2>
       {description && <p className={cn("mt-3 text-base", onDark ? "text-white/80" : "text-foreground/80")}>{description}</p>}
-    </div>
+    </Reveal>
   );
 }

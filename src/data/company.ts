@@ -18,6 +18,8 @@ export interface Company {
   hours: string | null;
   /** Google Maps (or similar) link to the verified location */
   directionsUrl: string | null;
+  /** Google Play listing of the Munna United app. null = badge is shown without a link. */
+  playStoreUrl: string | null;
   /** Public site URL, e.g. "https://example.com" (also settable via SITE_URL at build time) */
   siteUrl: string | null;
 }
@@ -28,9 +30,9 @@ export const company: Company = {
   gstin: "36AASCM8686R1ZY",
   // Owner stated IOCL registration; confirm exact wording before launch.
   affiliation: "Registered Distributor with IOCL",
-  phone: null,
-  whatsapp: null,
-  email: null,
+  phone: "+917207394242",
+  whatsapp: "+917207394242",
+  email: "support@munnauniteddistribution.com",
   addressLines: [
     "3rd Floor, Hero Building, Tilak Nagar Road",
     "New Nallakunta, Musheerabad",
@@ -42,6 +44,7 @@ export const company: Company = {
   directionsUrl:
     "https://www.google.com/maps/search/?api=1&query=" +
     encodeURIComponent("Munna United Distributors Private Limited, Hero Building, Tilak Nagar Road, New Nallakunta, Musheerabad, Hyderabad 500044"),
+  playStoreUrl: null,
   siteUrl: null,
 };
 

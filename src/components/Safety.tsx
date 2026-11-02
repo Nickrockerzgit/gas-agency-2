@@ -2,6 +2,7 @@ import { ArrowRight, FileText, Phone, Truck, Wind, Wrench, type LucideIcon } fro
 import { emergencyHelpline } from "@/data/company";
 import { safetyItems, type SafetyIcon } from "@/data/safety";
 import { LinkButton } from "./ContactAction";
+import { Reveal } from "./Reveal";
 import { Section } from "./Section";
 
 const icons: Record<SafetyIcon, LucideIcon> = {
@@ -50,7 +51,7 @@ export function Safety() {
       </h2>
       <div className="rounded-2xl border border-line bg-white p-3 shadow-sm sm:p-4">
         <div className="grid gap-4 lg:grid-cols-12">
-          <div className="flex flex-col justify-between gap-8 rounded-xl bg-primary p-7 text-white lg:col-span-5 lg:p-9">
+          <Reveal className="flex flex-col justify-between gap-8 rounded-xl bg-primary p-7 text-white lg:col-span-5 lg:p-9" y={44} scale={0.97}>
             <div className="space-y-4">
               <p className="flex items-center gap-3 font-mono text-[11px] font-bold tracking-widest uppercase">
                 <span className="h-0.5 w-8 bg-signal" aria-hidden="true" /> LPG Safety
@@ -61,18 +62,18 @@ export function Safety() {
               <p className="text-sm text-white/80">Essential LPG safety guidance for your business.</p>
             </div>
             <ShieldArt />
-          </div>
+          </Reveal>
 
           <div className="py-2 lg:col-span-7 lg:px-4">
-            <div className="mb-3 space-y-3">
+            <Reveal className="mb-3 space-y-3" y={24} delay={0.1}>
               <span className="block h-0.5 w-8 bg-signal" aria-hidden="true" />
               <h3 className="text-2xl font-bold">Good practices. Clear guidance.</h3>
-            </div>
+            </Reveal>
             <ol className="divide-y divide-line">
               {safetyItems.map((item, i) => {
                 const Icon = icons[item.icon];
                 return (
-                  <li key={item.title}>
+                  <Reveal as="li" key={item.title} y={28} delay={0.15 + i * 0.1}>
                     <a
                       href={item.href}
                       target="_blank"
@@ -95,14 +96,14 @@ export function Safety() {
                         <ArrowRight className="size-4" />
                       </span>
                     </a>
-                  </li>
+                  </Reveal>
                 );
               })}
             </ol>
           </div>
         </div>
 
-        <div className="mt-4 grid items-center gap-6 rounded-xl bg-signal px-6 py-6 text-white md:grid-cols-3 md:gap-0 md:py-5">
+        <Reveal className="mt-4 grid items-center gap-6 rounded-xl bg-signal px-6 py-6 text-white md:grid-cols-3 md:gap-0 md:py-5" y={40} scale={0.95}>
           <div className="md:pr-6">
             <p className="text-lg font-bold">Suspect an LPG leak?</p>
             <p className="text-sm text-white/90">Call from a safe location.</p>
@@ -120,7 +121,7 @@ export function Safety() {
             </LinkButton>
             <p className="text-xs text-white/90">Emergency support only</p>
           </div>
-        </div>
+        </Reveal>
       </div>
     </Section>
   );

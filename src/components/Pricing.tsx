@@ -7,6 +7,7 @@ import { formatDate, formatInr, rateState, type RateState } from "@/lib/rates";
 import { useToday } from "@/lib/today";
 import { cn } from "@/lib/utils";
 import { CallButton } from "./ContactAction";
+import { Reveal } from "./Reveal";
 import { Section, SectionHeader } from "./Section";
 
 /** Short descriptor under the size, as in the rate registry. */
@@ -24,7 +25,7 @@ interface Row {
   state: RateState;
 }
 
-const th = "px-4 font-mono text-xs font-bold tracking-wider text-primary uppercase";
+const th = "px-4 text-sm font-bold text-primary";
 
 function RateCell({ row }: { row: Row }) {
   const { record: r, state } = row;
@@ -41,7 +42,7 @@ function RateCell({ row }: { row: Row }) {
   }
   return (
     <div className="space-y-1">
-      <span className="font-mono text-sm font-semibold text-primary/80">
+      <span className="text-[15px] font-semibold text-primary/80">
         {state === "unavailable" && r ? "Currently unavailable — contact the agency" : "Contact for rate"}
       </span>
       {state === "future" && amount && r?.effectiveFrom && (
@@ -74,7 +75,7 @@ function Title({ row }: { row: Row }) {
         {p.label} {p.status === "published" ? "cylinder" : "cylinder"}
         {dot && <Dot tone={dot} />}
       </span>
-      <span className="font-mono text-[11px] text-primary/60">{sublabel[p.id] ?? p.variant}</span>
+      <span className="text-[13px] text-foreground/60">{sublabel[p.id] ?? p.variant}</span>
     </>
   );
 }
@@ -130,16 +131,17 @@ export function Pricing() {
         title="Clear, dated pricing"
         description="Check the published rate details or contact our team for the latest applicable MRP."
       />
-      <div className="grid items-start gap-8 lg:grid-cols-12">
-        <Card className="gap-0 overflow-hidden py-0 shadow-sm lg:col-span-8">
+      <div className="grid gap-8 lg:grid-cols-12">
+        <Reveal className="lg:col-span-8" y={44}>
+        <Card className="h-full gap-0 overflow-hidden py-0 shadow-sm">
           <div className="space-y-1 border-b border-line p-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-sm font-bold text-primary">Commercial Tariff Registry</span>
-              <span className="rounded border border-line bg-tonal px-2 py-0.5 font-mono text-xs text-primary">
+              <span className="text-xl font-extrabold tracking-tight text-primary">Commercial Tariff Registry</span>
+              <span className="rounded-full border border-line bg-tonal px-3 py-0.5 text-xs font-semibold text-primary">
                 {zone ?? "Rate zone to be confirmed"}
               </span>
             </div>
-            <p className="font-mono text-xs text-primary/70">
+            <p className="text-sm text-foreground/70">
               Effective:{" "}
               <span className="font-bold text-primary">{effectiveDate ? formatDate(effectiveDate) : "Pending verification"}</span>
             </p>
@@ -165,7 +167,7 @@ export function Pricing() {
                   <TableCell className="px-4 py-3.5 whitespace-normal">
                     <RateCell row={row} />
                   </TableCell>
-                  <TableCell className="px-4 py-3.5 font-mono text-xs whitespace-normal text-primary/70">{effective(row)}</TableCell>
+                  <TableCell className="px-4 py-3.5 text-sm whitespace-normal text-foreground/70">{effective(row)}</TableCell>
                   <TableCell className="px-4 py-3.5 text-right">
                     <Action row={row} />
                   </TableCell>
@@ -181,7 +183,7 @@ export function Pricing() {
                   <Title row={row} />
                 </div>
                 <RateCell row={row} />
-                <p className="font-mono text-xs text-primary/70">Effective from: {effective(row)}</p>
+                <p className="text-sm text-foreground/70">Effective from: {effective(row)}</p>
                 <Action row={row} full />
               </li>
             ))}
@@ -192,21 +194,23 @@ export function Pricing() {
             Confirm the applicable rate, price basis and availability before placing an order.
           </p>
         </Card>
+        </Reveal>
 
-        <Card className="gap-4 p-5 shadow-sm lg:col-span-4">
-          <p className="flex items-center gap-2 border-b border-line pb-2 font-mono text-xs font-bold tracking-wider text-primary uppercase">
+        <Reveal className="lg:col-span-4" y={44} delay={0.15}>
+        <Card className="h-full gap-4 p-5 shadow-sm lg:justify-between">
+          <p className="flex items-center gap-2 border-b border-line pb-3 text-base font-extrabold tracking-tight text-primary">
             <Hourglass className="size-4 text-signal" aria-hidden="true" /> Regulatory rate cycle
           </p>
           <div className="rounded-lg border border-line bg-tonal p-4">
-            <span className="mb-2 inline-block rounded bg-primary px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider text-white uppercase">
+            <span className="mb-2 inline-block rounded bg-primary px-2.5 py-0.5 text-xs font-bold text-white">
               Rate schedule
             </span>
-            <h3 className="text-sm font-bold">{anyPending ? "Latest rate pending verification" : "Rates verified for this period"}</h3>
-            <p className="mt-1.5 text-xs leading-relaxed text-foreground/80">
+            <h3 className="text-base font-bold">{anyPending ? "Latest rate pending verification" : "Rates verified for this period"}</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-foreground/80">
               Rates are subject to monthly revision. Published rates are updated once the new rate list has been verified.
             </p>
           </div>
-          <dl className="space-y-2 text-xs">
+          <dl className="space-y-2 text-sm">
             {[
               ["Revision Cycle:", "1st of Every Calendar Month", false],
               ["Invoicing Basis:", "Confirmed on enquiry", false],
@@ -214,12 +218,13 @@ export function Pricing() {
             ].map(([k, v, red]) => (
               <div key={String(k)} className="flex items-center justify-between gap-4 border-b border-line py-1">
                 <dt className="text-foreground/70">{k}</dt>
-                <dd className={cn("text-right font-mono font-bold", red ? "text-signal" : "text-primary")}>{v}</dd>
+                <dd className={cn("text-right font-bold", red ? "text-signal" : "text-primary")}>{v}</dd>
               </div>
             ))}
           </dl>
           <CallButton label="Inquire Today's Rate" variant="default" className="w-full" />
         </Card>
+        </Reveal>
       </div>
     </Section>
   );

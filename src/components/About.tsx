@@ -1,6 +1,7 @@
 import { CircleCheck, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { company } from "@/data/company";
+import { Parallax, Reveal } from "./Reveal";
 import { Section } from "./Section";
 
 const points = [
@@ -11,13 +12,13 @@ const points = [
 
 export function About() {
   return (
-    <Section id="about" titleId="about-title" tone="tonal">
+    <Section id="about" titleId="about-title" tone="tonal" className="md:py-24">
       <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
-        <div className="lg:order-2 lg:col-span-6">
+        <Reveal className="lg:order-2 lg:col-span-6" y={40} delay={0.1}>
           <p className="font-mono text-xs font-bold tracking-widest text-signal uppercase">About Us</p>
-          <h2 id="about-title" className="mt-1 text-3xl font-bold sm:text-4xl">
+          <h1 id="about-title" className="mt-1 text-3xl font-bold sm:text-4xl">
             About {company.legalName.replace(" Private Limited", " Pvt. Ltd.")}
-          </h2>
+          </h1>
 
           <div className="mt-5 max-w-xl space-y-4 text-base text-foreground/80">
             <p>
@@ -49,9 +50,10 @@ export function About() {
               </Badge>
             )}
           </div>
-        </div>
+        </Reveal>
 
-        <div className="lg:order-1 lg:col-span-6">
+        <Reveal className="lg:order-1 lg:col-span-6" y={50} scale={0.95}>
+          <Parallax amount={24}>
           <img
             src="/img/about-storefront.webp"
             alt="Munna United commercial LPG storefront with cylinders stored beside the entrance"
@@ -60,7 +62,8 @@ export function About() {
             loading="lazy"
             className="mx-auto h-auto w-full max-w-[540px] lg:mr-auto"
           />
-        </div>
+          </Parallax>
+        </Reveal>
       </div>
     </Section>
   );

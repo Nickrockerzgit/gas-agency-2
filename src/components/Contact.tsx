@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
-import { Clock, Info, Mail, MapPin, Navigation, Phone, Store } from "lucide-react";
+import { Info, Mail, MapPin, Navigation, Phone, Store } from "lucide-react";
 import { company } from "@/data/company";
-import { telHref } from "@/lib/links";
+import { formatPhone, telHref } from "@/lib/links";
+import { Reveal } from "./Reveal";
 import { Section } from "./Section";
 
 function DeskRow({ icon, label, children }: { icon: ReactNode; label: string; children: ReactNode }) {
@@ -20,15 +21,6 @@ function DeskRow({ icon, label, children }: { icon: ReactNode; label: string; ch
 
 const ComingSoon = () => <span>Details coming soon</span>;
 
-function Detail({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="min-w-0">
-      <dt className="font-mono text-xs font-semibold tracking-[0.18em] text-foreground/60 uppercase">{label}</dt>
-      <dd className="mt-2 text-xl font-bold break-words text-primary">{value}</dd>
-    </div>
-  );
-}
-
 export function Contact() {
   const phone = company.phone ?? company.whatsapp;
   const address = company.addressLines?.map((line, i, all) => {
@@ -39,7 +31,7 @@ export function Contact() {
   return (
     <Section id="contact" titleId="contact-title" tone="white">
       <div className="grid items-stretch gap-10 lg:grid-cols-12 lg:gap-12">
-        <div className="lg:col-span-6">
+        <Reveal className="lg:col-span-6" y={40}>
           <p className="flex items-center gap-4 font-mono text-xs font-bold tracking-[0.2em] text-signal uppercase">
             Contact Munna United
             <span className="h-0.5 w-10 bg-signal" aria-hidden="true" />
@@ -54,7 +46,7 @@ export function Contact() {
             <DeskRow icon={<Phone className="size-7" />} label="Phone & WhatsApp">
               {phone ? (
                 <a href={telHref(phone)} className="hover:underline">
-                  {phone}
+                  {formatPhone(phone)}
                 </a>
               ) : (
                 <ComingSoon />
@@ -69,9 +61,6 @@ export function Contact() {
                 <ComingSoon />
               )}
             </DeskRow>
-            <DeskRow icon={<Clock className="size-7" />} label="Office hours">
-              {company.hours ?? <ComingSoon />}
-            </DeskRow>
           </ul>
 
           <div className="mt-2 flex items-start gap-4 rounded-xl bg-[#e8f1fc] px-5 py-4">
@@ -81,9 +70,9 @@ export function Contact() {
               <p className="text-[15px] text-foreground/70">Keep your cylinder size, quantity and delivery location ready.</p>
             </div>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="flex flex-col overflow-hidden rounded-2xl bg-[#012a52] text-white lg:col-span-6">
+        <Reveal className="flex flex-col overflow-hidden rounded-2xl bg-[#012a52] text-white lg:col-span-6" y={40} delay={0.15} scale={0.97}>
           <div className="px-8 pt-10 pb-8 sm:px-10">
             <MapPin className="size-10 fill-signal text-signal" aria-hidden="true" />
             <h3 className="mt-3 text-3xl font-extrabold text-white sm:text-4xl">Visit our registered office</h3>
@@ -117,26 +106,16 @@ export function Contact() {
             loading="lazy"
             className="mt-auto block h-auto w-full"
           />
-        </div>
+        </Reveal>
       </div>
 
-      <div className="mt-10 rounded-2xl bg-[#e8f1fc] px-6 py-8 sm:px-8">
-        <p className="font-mono text-xs font-semibold tracking-[0.2em] text-foreground/60 uppercase">Registered business details</p>
-        <p className="mt-3 text-2xl font-extrabold text-primary sm:text-3xl">{company.legalName}</p>
-        <dl className="mt-6 grid gap-6 sm:grid-cols-[auto_1px_auto] sm:justify-start sm:gap-10">
-          {company.cin && <Detail label="CIN" value={company.cin} />}
-          {company.cin && company.gstin && <div className="hidden bg-line sm:block" aria-hidden="true" />}
-          {company.gstin && <Detail label="GSTIN" value={company.gstin} />}
-        </dl>
-      </div>
-
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+      <Reveal className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5" y={20}>
         <p className="flex items-center gap-3 font-bold text-primary">
           <Store className="size-6 text-signal" aria-hidden="true" /> Commercial supply only
         </p>
         <span className="hidden h-6 w-px bg-line sm:block" aria-hidden="true" />
         <p className="text-sm text-foreground/60">Availability, rates and supply arrangements are confirmed by our team.</p>
-      </div>
+      </Reveal>
     </Section>
   );
 }

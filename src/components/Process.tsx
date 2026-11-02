@@ -1,5 +1,7 @@
 import { ArrowRight, BedDouble, Building2, ChefHat, CookingPot, Utensils } from "lucide-react";
+import { motion, type Variants } from "motion/react";
 import { Card } from "@/components/ui/card";
+import { Reveal } from "./Reveal";
 import { Section } from "./Section";
 
 const customers = [
@@ -34,6 +36,12 @@ const customers = [
     primary: "High-volume bank",
   },
 ];
+
+// Position and scale only, no opacity gate, so the cards are readable before scripts run.
+const cardIn: Variants = {
+  hidden: (i: number) => ({ y: 36, scale: 0.94, rotate: i % 2 ? 1.6 : -1.6 }),
+  show: { y: 0, scale: 1, rotate: 0, transition: { type: "spring", stiffness: 120, damping: 16 } },
+};
 
 /** Two-tone line icons: navy outline with red details. */
 const stroke = { fill: "none", strokeWidth: 2.2, strokeLinecap: "round", strokeLinejoin: "round" } as const;
@@ -78,31 +86,54 @@ const steps = [
 export function Customers() {
   return (
     <Section tone="navy" titleId="who-title">
-      <div className="mb-10 max-w-3xl">
+      <Reveal className="mb-10 max-w-3xl" y={28}>
         <p className="font-mono text-xs font-bold tracking-widest text-[#ff8a9a] uppercase">Institutional Commercial Clients</p>
         <h2 id="who-title" className="mt-1 text-3xl font-bold text-white sm:text-4xl">
           For commercial kitchens of every scale
         </h2>
         <p className="mt-3 text-base text-white/80">Reliable fuel distribution architecture tailored to high-output commercial establishments.</p>
-      </div>
-      <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
-        {customers.map(({ icon: Icon, t, d, primary }) => (
-          <li key={t}>
-            <Card className="h-full justify-between gap-4 border-white/15 bg-white/5 p-5 text-white">
-              <div className="space-y-2">
-                <span className="grid size-10 place-items-center rounded-lg bg-white/10" aria-hidden="true">
-                  <Icon className="size-5 text-white" />
+      </Reveal>
+      {/* Cards rise in one after another as the section scrolls into view; they stay visible without JS. */}
+      <motion.ul
+        className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ staggerChildren: 0.12 }}
+      >
+        {customers.map(({ icon: Icon, t, d, primary }, i) => (
+          <motion.li key={t} variants={cardIn} custom={i}>
+            <Card className="group relative h-full justify-between gap-4 overflow-hidden border-white/15 bg-white/5 p-5 text-white transition-all duration-300 ease-out hover:-translate-y-2 hover:border-white/40 hover:bg-white/10 hover:shadow-[0_22px_40px_-14px_rgba(200,16,46,0.55)]">
+              {/* Red accent line draws across the top on hover. */}
+              <span
+                className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-signal transition-transform duration-500 ease-out group-hover:scale-x-100"
+                aria-hidden="true"
+              />
+              {/* Light sweep across the card on hover. */}
+              <span
+                className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[420%]"
+                aria-hidden="true"
+              />
+              <div className="relative space-y-2">
+                <span
+                  className="grid size-10 place-items-center rounded-lg bg-white/10 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-signal"
+                  aria-hidden="true"
+                >
+                  <Icon
+                    className="size-5 text-white motion-safe:animate-[card-float_3.6s_ease-in-out_infinite]"
+                    style={{ animationDelay: `${i * 0.4}s` }}
+                  />
                 </span>
                 <h3 className="pt-2 text-lg font-bold text-white">{t}</h3>
-                <p className="text-[13px] leading-5 text-white/75">{d}</p>
+                <p className="text-[13px] leading-5 text-white/75 transition-colors duration-300 group-hover:text-white/90">{d}</p>
               </div>
-              <p className="border-t border-white/10 pt-3 font-mono text-[10px] font-semibold tracking-wider text-white/60 uppercase">
+              <p className="relative border-t border-white/10 pt-3 font-mono text-[10px] font-semibold tracking-wider text-white/60 uppercase transition-colors duration-300 group-hover:border-white/30 group-hover:text-[#ff8a9a]">
                 Primary: {primary}
               </p>
             </Card>
-          </li>
+          </motion.li>
         ))}
-      </ul>
+      </motion.ul>
     </Section>
   );
 }
@@ -110,7 +141,7 @@ export function Customers() {
 export function Steps() {
   return (
     <Section titleId="how-title">
-      <div className="mb-12 max-w-3xl">
+      <Reveal className="mb-12 max-w-3xl" y={28}>
         <p className="flex items-center gap-4 font-mono text-sm font-bold tracking-[0.22em] text-signal uppercase">
           Process <span className="h-0.5 w-16 bg-signal" aria-hidden="true" />
         </p>
@@ -118,7 +149,7 @@ export function Steps() {
           How to enquire
         </h2>
         <p className="mt-3 text-lg text-foreground/75">Three simple steps to discuss your supply needs.</p>
-      </div>
+      </Reveal>
 
       <ol className="relative grid gap-12 md:grid-cols-3 md:gap-0">
         {/* Timeline: navy line with red segments, ending in an arrow. */}
@@ -130,7 +161,7 @@ export function Steps() {
         <ArrowRight className="absolute top-[18px] right-[1.5%] hidden size-5 text-signal md:block" strokeWidth={2.5} aria-hidden="true" />
 
         {steps.map(({ icon: Icon, t, d }, i) => (
-          <li key={t} className="relative flex flex-col items-center text-center">
+          <Reveal as="li" key={t} delay={i * 0.18} y={44} className="relative flex flex-col items-center text-center">
             <span
               className="relative z-10 grid size-14 place-items-center rounded-full bg-primary text-lg font-bold text-white ring-8 ring-white"
               aria-hidden="true"
@@ -145,7 +176,7 @@ export function Steps() {
               {t}
             </h3>
             <p className="mt-2 max-w-[17rem] text-base text-foreground/70">{d}</p>
-          </li>
+          </Reveal>
         ))}
       </ol>
     </Section>

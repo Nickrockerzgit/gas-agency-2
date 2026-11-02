@@ -1,9 +1,11 @@
 import type { ReactNode } from "react";
 import { Clock, Mail, MapPin, Phone, ShieldCheck } from "lucide-react";
 import { company, emergencyHelpline } from "@/data/company";
-import { telHref } from "@/lib/links";
+import { formatPhone, telHref } from "@/lib/links";
+import { Link } from "@/lib/router";
 import { nav } from "./Header";
 import { MobileBar } from "./MobileBar";
+import { Reveal } from "./Reveal";
 import { Container } from "./Section";
 
 const accent = "text-[#ff8a9a]";
@@ -14,7 +16,7 @@ function Detail({ icon, children }: { icon: ReactNode; children: ReactNode }) {
       <span className={`mt-1 shrink-0 ${accent}`} aria-hidden="true">
         {icon}
       </span>
-      <span className="text-white/85">{children}</span>
+      <span className="min-w-0 text-white/85 [overflow-wrap:anywhere]">{children}</span>
     </li>
   );
 }
@@ -27,7 +29,7 @@ export function Footer() {
         className="relative bg-[#01244c] bg-[url('/img/footer-skyline.webp')] bg-[length:auto_300px] bg-[position:37%_bottom] bg-no-repeat text-white md:bg-[length:100%_auto] md:bg-bottom"
       >
         <Container className="grid gap-10 py-12 text-sm md:grid-cols-2 lg:grid-cols-12">
-          <div className="space-y-4 lg:col-span-5">
+          <Reveal className="space-y-4 lg:col-span-5" y={28}>
             <div>
               <p className="text-xl font-bold">{company.legalName.replace(" Private Limited", " Pvt. Ltd.")}</p>
               <p className={`mt-1 font-mono text-[11px] font-bold tracking-wider uppercase ${accent}`}>Commercial LPG Specialist</p>
@@ -46,29 +48,31 @@ export function Footer() {
                 </li>
               )}
             </ul>
-          </div>
+          </Reveal>
 
-          <nav aria-label="Footer" className="lg:col-span-3 lg:col-start-7">
+          <Reveal className="lg:col-span-3 lg:col-start-7" y={28} delay={0.1}>
+          <nav aria-label="Footer">
             <h2 className="mb-4 text-xl font-bold text-white">Quick Links</h2>
             <ul className="space-y-1">
               {nav.map((n) => (
                 <li key={n.href}>
-                  <a href={n.href} className="inline-flex min-h-9 items-center text-white/85 hover:text-white hover:underline">
+                  <Link href={n.href} className="inline-flex min-h-9 items-center text-white/85 hover:text-white hover:underline">
                     {n.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
+          </Reveal>
 
-          <div className="lg:col-span-3">
+          <Reveal className="lg:col-span-3" y={28} delay={0.2}>
             <h2 className="mb-4 text-xl font-bold text-white">Central Dispatch</h2>
             <ul className="space-y-3">
               {company.addressLines && <Detail icon={<MapPin className="size-4" />}>{company.addressLines.join(", ")}</Detail>}
               {company.phone && (
                 <Detail icon={<Phone className="size-4" />}>
                   <a href={telHref(company.phone)} className="hover:underline">
-                    {company.phone}
+                    {formatPhone(company.phone)}
                   </a>
                 </Detail>
               )}
@@ -82,7 +86,7 @@ export function Footer() {
               {company.hours && <Detail icon={<Clock className="size-4" />}>{company.hours}</Detail>}
               {noContact && <li className="pl-7 text-white/60">Phone, email and hours will be published soon.</li>}
             </ul>
-          </div>
+          </Reveal>
         </Container>
 
         <Container>
@@ -100,9 +104,9 @@ export function Footer() {
             </p>
             <ul className="flex flex-wrap gap-x-6 gap-y-1">
               <li>
-                <a href="#safety" className="inline-flex min-h-8 items-center hover:underline">
+                <Link href="/#safety" className="inline-flex min-h-8 items-center hover:underline">
                   Safety Protocols
-                </a>
+                </Link>
               </li>
               <li>
                 <a href={`tel:${emergencyHelpline}`} className="inline-flex min-h-8 items-center hover:underline">
@@ -110,9 +114,9 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#contact" className="inline-flex min-h-8 items-center hover:underline">
+                <Link href="/#contact" className="inline-flex min-h-8 items-center hover:underline">
                   Enquiries
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

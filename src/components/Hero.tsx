@@ -1,12 +1,11 @@
-import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
-import { ArrowDown, CircleCheck } from "lucide-react";
+import { CircleCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { company, emergencyHelpline } from "@/data/company";
 import { publishedProducts } from "@/data/products";
 import { cn } from "@/lib/utils";
-import { prefersReducedMotion } from "@/lib/smoothScroll";
-import { CallButton, LinkButton } from "./ContactAction";
+import { CallButton, PlayStoreBadge } from "./ContactAction";
+import { HeroCylinders } from "./HeroCylinders";
 import { Container } from "./Section";
 
 function Fact({ label, value, signal }: { label: string; value: string; signal?: boolean }) {
@@ -14,40 +13,6 @@ function Fact({ label, value, signal }: { label: string; value: string; signal?:
     <div className="rounded border border-line bg-tonal p-3">
       <span className="block font-mono text-[11px] text-primary/70 uppercase">{label}</span>
       <span className={cn("text-sm font-bold", signal ? "text-signal" : "text-primary")}>{value}</span>
-    </div>
-  );
-}
-
-/**
- * Muted, looping turntable video on a pure-white background.
- * Desktop: sits behind the hero content, anchored to the right so the cylinders stay on the right side.
- * Mobile: shown below the text. With reduced motion it stays on the poster frame.
- */
-function HeroVideo() {
-  const ref = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    const v = ref.current;
-    if (!v) return;
-    v.muted = true; // React does not render the muted attribute into server HTML
-    if (prefersReducedMotion()) v.pause();
-    else v.play().catch(() => {});
-  }, []);
-  return (
-    <div>
-      <video
-        ref={ref}
-        className="pointer-events-none block aspect-video w-full mix-blend-multiply lg:absolute lg:top-1/2 lg:left-[33%] lg:z-0 lg:aspect-auto lg:h-[112%] lg:w-auto lg:max-w-none lg:-translate-y-1/2"
-        src="/video/hero-v2.mp4"
-        poster="/img/hero-poster-v2.webp"
-        width={1280}
-        height={720}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-label="Rotating view of 5 kg, 19 kg and 47.5 kg LPG cylinders with a hand trolley"
-      />
     </div>
   );
 }
@@ -72,9 +37,7 @@ export function Hero() {
           </p>
           <div className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-center">
             <CallButton size="lg" className="shadow-md" />
-            <LinkButton href="#cylinders" variant="outline" size="lg">
-              Explore Cylinders <ArrowDown />
-            </LinkButton>
+            <PlayStoreBadge />
           </div>
           <p className="flex items-center gap-2 pt-1 text-sm font-semibold text-primary">
             <CircleCheck className="size-[18px]" aria-hidden="true" /> For restaurants, hotels, caterers and commercial kitchens.
@@ -87,7 +50,7 @@ export function Hero() {
         </motion.div>
 
         <div className="lg:col-span-6">
-          <HeroVideo />
+          <HeroCylinders />
         </div>
       </Container>
     </section>
