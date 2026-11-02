@@ -49,7 +49,7 @@ export function Hero() {
           </div>
         </motion.div>
 
-        <div className="lg:col-span-6">
+        <div className="lg:col-span-6 lg:self-start">
           <HeroCylinders />
         </div>
       </Container>
